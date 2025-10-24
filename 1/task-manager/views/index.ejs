@@ -1,0 +1,111 @@
+<%- include('partials/header') %>
+
+        <main class="main">
+            <!-- Форма добавления задачи -->
+            <section class="add-task-section">
+                <h2>Добавить новую задачу</h2>
+                <form action="/tasks" method="POST" enctype="multipart/form-data" class="task-form">
+                    <div class="form-group">
+                        <label for="title">Название задачи *</label>
+                        <input type="text" id="title" name="title" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="description">Описание</label>
+                        <textarea id="description" name="description" rows="3"></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="dueDate">Ожидаемая дата завершения</label>
+                        <input type="date" id="dueDate" name="dueDate">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="attachments">Прикрепить файлы (до 5 файлов)</label>
+                        <input type="file" id="attachments" name="attachments" multiple>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary">Добавить задачу</button>
+                </form>
+            </section>
+
+            <!-- Фильтры и список задач -->
+            <section class="tasks-section">
+                <div class="tasks-header">
+                    <h2>Список задач</h2>
+                    <div class="filters">
+                        <a href="/?filter=all" class="filter-btn <%= currentFilter === 'all' ? 'active' : '' %>">Все</a>
+                        <a href="/?filter=active" class="filter-btn <%= currentFilter === 'active' ? 'active' : '' %>">Активные</a>
+                        <a href="/?filter=completed" class="filter-btn <%= currentFilter === 'completed' ? 'active' : '' %>">Завершенные</a>
+                    </div>
+                </div>
+
+                <% if (tasks.length === 0) { %>
+                    <div class="empty-state">
+                        <p>Задачи не найдены. Добавьте первую задачу!</p>
+                    </div>
+                <% } else { %>
+                    <div class="tasks-list">
+                        <% tasks.forEach(task => { %>
+                            <div class="task-card <%= task.completed ? 'completed' : '' %>">
+                                <div class="task-header">
+                                    <h3 class="task-title"><%= task.title %></h3>
+                                    <div class="task-actions">
+                                        <form action="/tasks/<%= task.id %>/toggle" method="POST" class="toggle-form">
+                                            <input type="hidden" name="_method" value="PUT">
+                                            <button type="submit" class="btn-toggle <%= task.completed ? 'completed' : '' %>">
+                                                <%= task.completed ? '✓' : '○' %>
+                                            </button>
+                                        </form>
+                                        <form action="/tasks/<%= task.id %>" method="POST" class="delete-form">
+                                            <input type="hidden" name="_method" value="DELETE">
+                                            <button type="submit" class="btn-delete">🗑️</button>
+                                        </form>
+                                    </div>
+                                </div>
+                                
+                                <% if (task.description) { %>
+                                    <p class="task-description"><%= task.description %></p>
+                                <% } %>
+                                
+                                <div class="task-meta">
+                                    <% if (task.dueDate) { %>
+                                        <div class="due-date">
+                                            <strong>Дата завершения:</strong> 
+                                            <%= new Date(task.dueDate).toLocaleDateString('ru-RU') %>
+                                        </div>
+                                    <% } %>
+                                    
+                                    <div class="task-status <%= task.completed ? 'status-completed' : 'status-active' %>">
+                                        <%= task.completed ? 'Завершено' : 'В процессе' %>
+                                    </div>
+                                </div>
+                                
+                                <% if (task.attachments && task.attachments.length > 0) { %>
+                                    <div class="attachments">
+                                        <strong>Прикрепленные файлы:</strong>
+                                        <ul class="attachments-list">
+                                            <% task.attachments.forEach(attachment => { %>
+                                                <li>
+                                                    <a href="/uploads/<%= attachment.filename %>" 
+                                                       download="<%= attachment.originalName %>"
+                                                       class="attachment-link">
+                                                        📎 <%= attachment.originalName %>
+                                                    </a>
+                                                </li>
+                                            <% }) %>
+                                        </ul>
+                                    </div>
+                                <% } %>
+                                
+                                <div class="task-date">
+                                    Создано: <%= new Date(task.createdAt).toLocaleString('ru-RU') %>
+                                </div>
+                            </div>
+                        <% }) %>
+                    </div>
+                <% } %>
+            </section>
+        </main>
+
+<%- include('partials/footer') %>
