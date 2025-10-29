@@ -1,0 +1,7 @@
+body { font-family: Arial, sans-serif; margin: 20px; }
+.container { max-width: 900px; margin: 0 auto; }
+#tasks .task { border: 1px solid #ddd; padding: 10px; margin: 10px 0; border-radius: 6px; }
+.task.completed { background: #f0fdf0; }
+.task .meta { font-size: 0.9em; color: #555; }
+.filter.active { font-weight: bold; }
+button { cursor: pointer; }
