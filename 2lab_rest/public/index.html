@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Task Manager SPA</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <header class="header container">
+    <h1>Список задач (SPA)</h1>
+    <p class="header-sub"></p>
+  </header>
+
+    <main class="main container">
+    <section class="add-task-section">
+      <h2>Добавить задачу</h2>
+      <form id="taskForm" class="task-form">
+        <div class="form-group">
+          <label for="title">Название *</label>
+          <input type="text" name="title" id="title" required>
+        </div>
+
+        <div class="form-group">
+          <label for="description">Описание</label>
+          <textarea name="description" id="description" rows="3"></textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="dueDate">Ожидаемая дата</label>
+          <input type="date" name="dueDate" id="dueDate">
+        </div>
+
+        <div class="form-group">
+          <label for="attachments">Прикрепить файлы (макс 5)</label>
+          <input type="file" id="attachments" name="attachments" multiple>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Добавить</button>
+      </form>
+    </section>
+
+    <section class="tasks-section">
+      <div class="tasks-header">
+        <h2>Список задач</h2>
+        <div class="filters">
+          <button data-filter="all" class="filter-btn active">Все</button>
+          <button data-filter="active" class="filter-btn">Активные</button>
+          <button data-filter="completed" class="filter-btn">Завершенные</button>
+        </div>
+      </div>
+
+      <div id="tasksList" class="tasks-list"></div>
+    </section>
+  </main>
+
+  <template id="taskTemplate">
+    <div class="task-card">
+      <div class="task-header">
+        <h3 class="task-title"></h3>
+        <div class="task-actions">
+          <button class="btn-toggle"></button>
+          <button class="btn-delete">🗑️</button>
+        </div>
+      </div>
+      <p class="task-desc"></p>
+      <div class="task-meta">
+        <div class="due-date"></div>
+        <div class="task-status"></div>
+      </div>
+      <ul class="attachments-list"></ul>
+      <div class="task-date"></div>
+    </div>
+  </template>
+
+  <script src="/app.js" defer></script>
+</body>
+</html>
