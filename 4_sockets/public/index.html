@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Task Manager SPA</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <header class="header container">
+    <div class="header-left">
+      <p class="header-sub"></p>
+    </div>
+
+    <div class="actions header-actions">
+      <button id="loginBtn" class="btn">Войти</button>
+      <button id="registerBtn" class="btn">Регистрация</button>
+      <button id="logoutBtn" class="btn" style="display:none;">Выйти</button>
+    </div>
+  </header>
+
+  <main class="main container">
+    <section class="add-task-section">
+      <h2>Добавить задачу</h2>
+      <form id="taskForm" class="task-form" autocomplete="off">
+        <div class="form-group">
+          <label for="title">Название *</label>
+          <input type="text" name="title" id="title" required>
+        </div>
+
+        <div class="form-group">
+          <label for="description">Описание</label>
+          <textarea name="description" id="description" rows="3"></textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="dueDate">Ожидаемая дата</label>
+          <input type="date" name="dueDate" id="dueDate">
+        </div>
+
+        <div class="form-group">
+          <label for="attachments">Прикрепить файлы (макс 5)</label>
+          <input type="file" id="attachments" name="attachments" multiple>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Добавить</button>
+      </form>
+    </section>
+
+    <section class="tasks-section">
+      <div class="tasks-header">
+        <h2>Список задач</h2>
+        <div class="filters">
+          <button data-filter="all" class="filter-btn active btn">Все</button>
+          <button data-filter="active" class="filter-btn btn">Активные</button>
+          <button data-filter="completed" class="filter-btn btn">Завершенные</button>
+        </div>
+      </div>
+
+      <div id="tasksList" class="tasks-list"></div>
+    </section>
+  </main>
+
+  <template id="taskTemplate">
+    <div class="task-card">
+      <div class="task-header">
+        <h3 class="task-title"></h3>
+        <div class="task-actions">
+          <button class="btn-toggle btn"></button>
+          <button class="btn-delete btn">🗑️</button>
+        </div>
+      </div>
+      <p class="task-desc"></p>
+      <div class="task-meta">
+        <div class="due-date"></div>
+        <div class="task-status"></div>
+      </div>
+      <ul class="attachments-list"></ul>
+      <div class="task-date"></div>
+    </div>
+  </template>
+
+  <!-- Login modal -->
+  <div id="loginModal" class="modal" aria-hidden="true">
+    <div class="modal-content">
+      <h3>Вход</h3>
+      <form id="loginForm" autocomplete="off">
+        <div class="form-group">
+          <label for="loginUsername">Логин</label>
+          <input id="loginUsername" name="username" required />
+        </div>
+        <div class="form-group">
+          <label for="loginPassword">Пароль</label>
+          <input id="loginPassword" name="password" type="password" required />
+        </div>
+        <div class="modal-actions">
+          <button type="submit" class="btn btn-primary">Войти</button>
+          <button type="button" id="loginCancel" class="btn">Отмена</button>
+        </div>
+        <p id="loginError" class="form-error" aria-live="polite"></p>
+      </form>
+    </div>
+  </div>
+
+  <!-- Register modal -->
+  <div id="registerModal" class="modal" aria-hidden="true">
+    <div class="modal-content">
+      <h3>Регистрация</h3>
+      <form id="registerForm" autocomplete="off">
+        <div class="form-group">
+          <label for="regUsername">Логин</label>
+          <input id="regUsername" name="username" required />
+        </div>
+        <div class="form-group">
+          <label for="regPassword">Пароль</label>
+          <input id="regPassword" name="password" type="password" required />
+        </div>
+        <div class="modal-actions">
+          <button type="submit" class="btn btn-primary">Зарегистрироваться</button>
+          <button type="button" id="registerCancel" class="btn">Отмена</button>
+        </div>
+        <p id="registerError" class="form-error" aria-live="polite"></p>
+        <p id="registerSuccess" class="form-success" aria-live="polite"></p>
+      </form>
+    </div>
+  </div>
+
+  <!-- Socket.IO client -->
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="/app.js" defer></script>
+</body>
+</html>
