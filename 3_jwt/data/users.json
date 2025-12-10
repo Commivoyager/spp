@@ -10,5 +10,11 @@
     "username": "123123",
     "passwordHash": "$2b$10$s6H9DVtYucGPxOBvQLg0AeKHwKbgHOswm7JWIffOvL9oL91won9zu",
     "createdAt": "2025-11-21T08:56:15.741Z"
+  },
+  {
+    "id": "b7d47a39-1371-4032-ad97-5da2ed3da345",
+    "username": "qwwe",
+    "passwordHash": "$2b$10$.nxwQDtHEPCVer.a8XguQeKFOpxkSvPgIiKHlLLPVzEfygwOlbIsK",
+    "createdAt": "2025-12-10T05:00:51.171Z"
   }
 ]

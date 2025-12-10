@@ -1,4 +1,3 @@
-/* ========== базовые сбросы ========== */
 * {
     margin: 0;
     padding: 0;
@@ -9,7 +8,7 @@ html, body {
     height: 100%;
 }
 
-/* ========== страничная сетка ========== */
+/*страничная сетка*/
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     line-height: 1.6;
@@ -24,7 +23,7 @@ body {
     padding: 20px;
 }
 
-/* ========== header ========== */
+/*header*/
 .header {
     display:flex;
     justify-content:space-between;
@@ -44,14 +43,14 @@ body {
     opacity: 0.9;
 }
 
-/* header actions (кнопки вход/регистрация/выход) */
+/* header actions - кнопки вход/регистрация/выход*/
 .header-actions {
     display:flex;
     gap:8px;
     align-items:center;
 }
 
-/* ========== основной контент ========== */
+/*основной контент*/
 .main {
     display: grid;
     grid-template-columns: 1fr 2fr;
@@ -65,7 +64,7 @@ body {
     }
 }
 
-/* ========== панель добавления задачи и список ========== */
+/*панель добавления задачи и список*/
 .add-task-section,
 .tasks-section {
     background: white;
@@ -108,7 +107,7 @@ body {
     box-shadow: 0 4px 14px rgba(102,126,234,0.12);
 }
 
-/* ========== кнопки ========== */
+/*кнопки*/
 .btn {
     padding: 10px 14px;
     border-radius: 8px;
@@ -140,7 +139,7 @@ body {
     margin-top: 8px;
 }
 
-/* ========== tasks header & filters ========== */
+/*tasks header & filters*/
 .tasks-header {
     display: flex;
     justify-content: space-between;
@@ -173,7 +172,7 @@ body {
     border-color: #667eea;
 }
 
-/* ========== список задач ========== */
+/*список задач*/
 .tasks-list {
     display: flex;
     flex-direction: column;
@@ -323,7 +322,7 @@ body {
     text-align: right;
 }
 
-/* ========== empty state ========== */
+/*empty state*/
 .empty-state {
     text-align: center;
     padding: 60px 20px;
@@ -334,7 +333,7 @@ body {
     font-size: 1.2rem;
 }
 
-/* ========== модалки (центральные) ========== */
+/*модалки (центральные)*/
 .modal {
     display: none;
     position: fixed;
@@ -375,12 +374,12 @@ body {
 .form-error:not(:empty) { display:block; }
 .form-success:not(:empty) { display:block; }
 
-/* ========== анимации ========== */
+/*анимации*/
 @keyframes fadeIn {
     from { opacity: 0; transform: translateY(20px); }
     to   { opacity: 1; transform: translateY(0); }
 }
 
-/* ========== мелкие поправки ========== */
+/*мелкие поправки*/
 a { color: inherit; }
 input[type="file"] { font-size: 0.95rem; }

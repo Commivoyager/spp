@@ -18,7 +18,24 @@ const usersFile = path.join(dataDir, 'users.json');
 const uploadsDir = path.join(__dirname, 'uploads');
 const secretFile = path.join(dataDir, 'jwt-secret.txt');
 
-const JWT_EXPIRES = '1h';
+const JWT_EXPIRES = '1m';
+
+function expiryToMs(exp) {
+  if (typeof exp === 'number') return exp * 1000;
+  if (typeof exp === 'string') {
+    const m = exp.match(/^(\d+)(s|m|h)?$/);
+    if (!m) return 60 * 1000;
+    const val = Number(m[1]);
+    const unit = m[2] || 's';
+    switch (unit) {
+      case 's': return val * 1000;
+      case 'm': return val * 60 * 1000;
+      case 'h': return val * 60 * 60 * 1000;
+      default: return val * 1000;
+    }
+  }
+  return 60 * 1000;
+}
 
 // ensure dirs
 if (!fsSync.existsSync(uploadsDir)) fsSync.mkdirSync(uploadsDir, { recursive: true });
@@ -107,7 +124,11 @@ function makeAuthMiddleware(JWT_SECRET) {
       if (!token) return res.status(401).json({ error: 'Unauthorized' });
 
       jwt.verify(token, JWT_SECRET, (err, payload) => {
-        if (err) return res.status(401).json({ error: 'Invalid token' });
+        if (err) {
+          const msg = (err.name === 'TokenExpiredError') ? 'Token expired' : 'Invalid token';
+          return res.status(401).json({ error: msg });
+        }
+        // для последующих handler-ов (multer, handlers)
         req.user = { id: payload.id, username: payload.username };
         next();
       });
@@ -117,6 +138,7 @@ function makeAuthMiddleware(JWT_SECRET) {
     }
   };
 }
+
 
 app.post('/api/auth/register', async (req, res) => {
   try {
@@ -150,12 +172,13 @@ app.post('/api/auth/login', async (req, res) => {
     if (!ok) return res.status(401).json({ error: 'Invalid credentials' });
 
     const token = jwt.sign({ id: user.id, username: user.username }, app.locals.JWT_SECRET, { expiresIn: JWT_EXPIRES });
+    const cookieMs = expiryToMs(JWT_EXPIRES);
 
     res.cookie('token', token, {
       httpOnly: true,
       sameSite: 'lax',
-      maxAge: 60 * 60 * 1000 // 1h
-      // secure: true // HTTPS
+      maxAge: cookieMs,
+      secure: process.env.NODE_ENV === 'production'
     });
 
     res.json({ message: 'OK' });
@@ -301,7 +324,6 @@ function mountProtectedRoutes() {
       // disk cleanup in user's uploads folder
       if (removed.attachments && removed.attachments.length > 0) {
         for (const att of removed.attachments) {
-          // att.filename stored earlier as name; files are in uploads/<ownerId>/<filename>
           const filePath = path.join(uploadsDir, removed.ownerId, att.filename);
           try { await fs.unlink(filePath); } catch (err) { console.warn('Could not delete file', filePath, err.message); }
         }
@@ -319,6 +341,8 @@ function mountProtectedRoutes() {
 app.get(/^\/(?!api).*/, (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
+
+
 
 
 (async () => {

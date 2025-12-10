@@ -29,15 +29,30 @@ const logoutBtn = document.getElementById('logoutBtn');
 // ожидание результата логина
 let _pendingLoginResolve = null;
 
+function setLoginState(isLoggedIn) {
+  loginBtn.style.display = isLoggedIn ? 'none' : '';
+  registerBtn.style.display = isLoggedIn ? 'none' : '';
+  logoutBtn.style.display = isLoggedIn ? '' : 'none';
+}
+
+setLoginState(false);
+
 // универсальный fetch с куки, retry
 async function apiFetch(url, opts = {}, retry = true) {
+  opts = Object.assign({}, opts); // клон, чтобы не мутировать внешний объект
   opts.credentials = 'include';
   try {
     const res = await fetch(url, opts);
     if (res.status === 401) {
       const ok = await promptLogin();
-      if (ok && retry) return apiFetch(url, opts, false);
-      throw new Error('Unauthorized');
+      if (ok && retry)
+      {
+         return apiFetch(url, opts, false);
+      }
+      else{
+        setLoginState(false);
+        throw new Error('Unauthorized');
+      }
     }
     return res;
   } catch (err) {
@@ -47,7 +62,7 @@ async function apiFetch(url, opts = {}, retry = true) {
 
 // показать модальное окно логина либо дождаться ответа 
 function promptLogin() {
-  // если модальное окно открыто
+  // прооверка, открыто ли модальное окно
   if (_pendingLoginResolve) {
     return new Promise((resolve) => {
       const prev = _pendingLoginResolve;
@@ -97,9 +112,7 @@ loginForm.addEventListener('submit', async (e) => {
     }
     hideLoginModal(true);
     // обновить UI
-    loginBtn.style.display = 'none';
-    registerBtn.style.display = 'none';
-    logoutBtn.style.display = '';
+    setLoginState(true);
     await renderTasks();
   } catch (err) {
     loginError.textContent = 'Ошибка сети';
@@ -150,10 +163,7 @@ registerForm.addEventListener('submit', async (e) => {
     });
     if (loginRes.ok) {
       registerModal.style.display = 'none';
-      loginBtn.style.display = 'none';
-      registerBtn.style.display = 'none';
-      logoutBtn.style.display = '';
-      // для ожидающих Promise - успешное завершение
+      setLoginState(true);
       if (_pendingLoginResolve) { _pendingLoginResolve(true); _pendingLoginResolve = null; }
       await renderTasks();
     } else {
@@ -169,12 +179,8 @@ registerForm.addEventListener('submit', async (e) => {
 
 // logout
 logoutBtn.addEventListener('click', async () => {
-  try {
-    await fetch('/api/auth/logout', { method: 'POST', credentials: 'include' });
-  } catch (_) {}
-  loginBtn.style.display = '';
-  registerBtn.style.display = '';
-  logoutBtn.style.display = 'none';
+  try { await fetch('/api/auth/logout', { method: 'POST', credentials: 'include' }); } catch (_) {}
+  setLoginState(false);
   await renderTasks();
 });
 
