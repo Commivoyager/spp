@@ -1,0 +1,26 @@
+[
+  {
+    "id": "bd01fcca-eeee-4726-a8cc-b950dc52d7c8",
+    "username": "123",
+    "passwordHash": "$2b$10$9gTSeugaKWJW1/naYNvISuiz67eeKI.rYlYJtLSXWpd/rnb1BdDDW",
+    "createdAt": "2025-11-21T08:25:52.232Z"
+  },
+  {
+    "id": "a5f1fc7f-9b67-4092-b987-7075d54c737b",
+    "username": "123123",
+    "passwordHash": "$2b$10$s6H9DVtYucGPxOBvQLg0AeKHwKbgHOswm7JWIffOvL9oL91won9zu",
+    "createdAt": "2025-11-21T08:56:15.741Z"
+  },
+  {
+    "id": "310c41b9-f48b-4544-84c2-79f00ca92731",
+    "username": "user1@mail.com",
+    "passwordHash": "$2b$10$aha30mKjZBdV5QXZRdwO/ugT8Q3BuQYjRHdTxI41YVq9rOnMUImc.",
+    "createdAt": "2025-12-24T17:57:34.798Z"
+  },
+  {
+    "id": "9bafbc87-5920-4962-bd35-0d7668604461",
+    "username": "user2@mail.com",
+    "passwordHash": "$2b$10$vN29qaWppe/uAlS7njjViO2Q/E21lDRyUzRKvtrFi/72fkl8zuBi6",
+    "createdAt": "2025-12-24T17:59:04.312Z"
+  }
+]
