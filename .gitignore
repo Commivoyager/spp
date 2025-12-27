@@ -17,3 +17,5 @@ data/tasks.json
 *.swp
 
 !tasks.pdf
+
+test_files/

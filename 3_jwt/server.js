@@ -18,7 +18,7 @@ const usersFile = path.join(dataDir, 'users.json');
 const uploadsDir = path.join(__dirname, 'uploads');
 const secretFile = path.join(dataDir, 'jwt-secret.txt');
 
-const JWT_EXPIRES = '1m';
+const JWT_EXPIRES = '15s';
 
 function expiryToMs(exp) {
   if (typeof exp === 'number') return exp * 1000;
